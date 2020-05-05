@@ -5,39 +5,43 @@
                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                         mc:Ignorable="d"
-                        xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.Presentation.Forms"
                         xmlns:details="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Views.DudeDetails"
                         xmlns:dudeDetails="clr-namespace:SillyCompany.Mobile.Practices.Presentation.ViewModels.DudeDetails"
+                        xmlns:loader="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
                         xmlns:loc="clr-namespace:SillyCompany.Mobile.Practices.Localization;assembly=SillyCompany.Mobile.Practices"
+                        xmlns:materialFrame="clr-namespace:Sharpnado.MaterialFrame;assembly=Sharpnado.MaterialFrame"
+                        xmlns:renderedViews="clr-namespace:Sharpnado.Presentation.Forms.RenderedViews;assembly=Sharpnado.Presentation.Forms"
                         xmlns:skiaRate="clr-namespace:SkiaRate;assembly=SillyCompany.Mobile.Practices"
                         xmlns:tabs="clr-namespace:Sharpnado.Presentation.Forms.CustomViews.Tabs;assembly=Sharpnado.Presentation.Forms"
                         xmlns:tb="clr-namespace:SillyCompany.Mobile.Practices.Presentation.CustomViews;assembly=SillyCompany.Mobile.Practices"
                         xmlns:views="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Views;assembly=SillyCompany.Mobile.Practices"
-                        d:DataContext="{d:DesignInstance dudeDetails:SillyDudeVm}"
-                        x:DataType="dudeDetails:SillyDudeVm">
+                        x:DataType="dudeDetails:SillyDudeVm"
+                        d:DataContext="{d:DesignInstance dudeDetails:SillyDudeVm}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TabStyle" TargetType="tabs:UnderlinedTabItem">
-                <Setter Property="SelectedTabColor" Value="{StaticResource White}" />
+                <Setter Property="SelectedTabColor" Value="{StaticResource Accent}" />
                 <Setter Property="FontFamily" Value="{StaticResource FontSemiBold}" />
                 <Setter Property="LabelSize" Value="14" />
                 <Setter Property="Padding" Value="20, 0" />
-                <Setter Property="UnderlineAllTab" Value="True" />
-                <Setter Property="UnselectedLabelColor" Value="White" />
+                <Setter Property="UnderlineAllTab" Value="False" />
+                <Setter Property="UnselectedLabelColor" Value="Gray" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-        <customViews:TaskLoaderView AbsoluteLayout.LayoutFlags="All"
-                                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                                    BackgroundColor="White"
-                                    ViewModelLoader="{Binding SillyDudeLoader}">
-            <Grid Padding="{StaticResource StandardThickness}"
+        <loader:TaskLoaderView AbsoluteLayout.LayoutFlags="All"
+                               AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                               BackgroundColor="{DynamicResource DynamicDudeBackgroundColor}"
+                               AccentColor="{StaticResource Accent}"
+                               TaskLoaderNotifier="{Binding SillyDudeLoaderNotifier}">
+            <Grid x:Name="GridContainer"
+                  RowSpacing="0"
                   ColumnSpacing="0"
-                  RowSpacing="0">
+                  Padding="{StaticResource StandardThickness}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="200" />
                     <RowDefinition Height="40" />
@@ -52,50 +56,55 @@
                        Grid.RowSpan="4"
                        Margin="-16,-16,-16,0"
                        Aspect="AspectFill"
-                       Source="{Binding SillyDudeLoader.Result.ImageUrl}" />
+                       Source="{Binding SillyDudeLoaderNotifier.Result.ImageUrl}" />
 
-                <BoxView Grid.Row="1"
-                         Grid.RowSpan="3"
-                         Margin="-16,0"
-                         BackgroundColor="#99000000" />
+                <materialFrame:MaterialFrame Grid.Row="1"
+                                             Grid.RowSpan="3"
+                                             Margin="-16,0"
+                                             Padding="0"
+                                             AndroidBlurRootElement="{Binding Source={x:Reference GridContainer}}"
+                                             CornerRadius="0"
+                                             IsClippedToBounds="False"
+                                             MaterialBlurStyle="Dark"
+                                             MaterialTheme="AcrylicBlur"
+                                             StyleId="7777" />
 
                 <Label Grid.Row="1"
                        Style="{StaticResource TextTitle}"
                        VerticalOptions="End"
-                       Text="{Binding SillyDudeLoader.Result.FullName}"
-                       TextColor="White" />
+                       TextColor="White"
+                       Text="{Binding SillyDudeLoaderNotifier.Result.FullName}" />
 
                 <Label Grid.Row="2"
                        Style="{StaticResource TextSubhead}"
-                       Text="{Binding SillyDudeLoader.Result.Role}"
-                       TextColor="White" />
+                       TextColor="White"
+                       Text="{Binding SillyDudeLoaderNotifier.Result.Role}" />
 
                 <skiaRate:RatingView Grid.Row="3"
                                      WidthRequest="100"
                                      HeightRequest="30"
                                      HorizontalOptions="Start"
-                                     ColorOn="Yellow"
+                                     ColorOn="{StaticResource Accent}"
                                      Count="5"
                                      OutlineOffColor="Transparent"
-                                     OutlineOnColor="Yellow"
                                      RatingType="Floating"
-                                     StrokeWidth="1"
-                                     Value="{Binding SillyDudeLoader.Result.SillinessDegree}" />
+                                     Value="{Binding SillyDudeLoaderNotifier.Result.SillinessDegree}" />
 
                 <tabs:TabHostView x:Name="TabHost"
                                   Grid.Row="4"
                                   Margin="-16,0"
-                                  BackgroundColor="{StaticResource Accent}"
-                                  SelectedIndex="{Binding Source={x:Reference Switcher}, Path=SelectedIndex, Mode=TwoWay}"
-                                  ShadowType="Bottom"
+                                  BackgroundColor="{DynamicResource Elevation4dpColor}"
+                                  ShadowType="{DynamicResource DynamicBottomShadow}"
                                   ShowScrollbar="False"
-                                  TabType="Scrollable">
+                                  TabType="Scrollable"
+                                  SelectedIndex="{Binding Source={x:Reference Switcher}, Path=SelectedIndex, Mode=TwoWay}">
                     <tabs:TabHostView.Tabs>
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="{loc:Translate Tabs_Quote}" />
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="{loc:Translate Tabs_Filmography}" />
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="{loc:Translate Tabs_Meme}" />
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="SOME MORE" />
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="WUT" />
+                        <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="AGAIN" />
                         <tabs:UnderlinedTabItem Style="{StaticResource TabStyle}" Label="FURTHER MORE" />
                     </tabs:TabHostView.Tabs>
                 </tabs:TabHostView>
@@ -104,14 +113,26 @@
                     <tabs:ViewSwitcher x:Name="Switcher"
                                        Animate="True"
                                        SelectedIndex="{Binding SelectedViewModelIndex, Mode=TwoWay}">
-                        <details:Quote Animate="True" BindingContext="{Binding Quote}" />
-                        <details:Filmo Animate="True" BindingContext="{Binding Filmo}" />
-                        <details:Meme Animate="True" BindingContext="{Binding Meme}" />
+                        <details:Quote BindingContext="{Binding Quote}" Animate="True" />
+                        <details:Filmo BindingContext="{Binding Filmo}" Animate="True" />
+                        <details:Meme BindingContext="{Binding Meme}" Animate="True" />
+                        <Label Style="{StaticResource TextHeader}"
+                               Margin="60,80"
+                               Text="Fitter. Happier. More productive. Like a pig. In a cage. On antibiotics." />
+                        <Label Style="{StaticResource TextHeader}"
+                               Margin="60,80"
+                               Text="Day 456. Dear Journal, I still couldn't make the cut for MS MVP. Thinking of doing a video of me dancing on a looped windows 95 startup sound. Estimated chance of success 0.2%. May worth a shot." />
+                        <Label Style="{StaticResource TextHeader}"
+                               Margin="60,80"
+                               Text="CONGRATULATIONS! YOU JUST DISCOVERED THE HIDDEN VIEW \o/ Come and ping me on Twitter @Piskariov with a screenshot. And if you're the first, you shall receive...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................nothing." />
+                        <Label Style="{StaticResource TextHeader}"
+                               Margin="60,80"
+                               Text="I'M A SHOOTING STAR ON MY WAY TO MARS ON A COLLISION COURSE I AM A SATELLITE I'M OUT OF CONTROL IM A SEX MACHINE READY TO RELOAD" />
                     </tabs:ViewSwitcher>
 
                 </ScrollView>
             </Grid>
-        </customViews:TaskLoaderView>
+        </loader:TaskLoaderView>
 
         <tb:Toolbar x:Name="Toolbar"
                     AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"

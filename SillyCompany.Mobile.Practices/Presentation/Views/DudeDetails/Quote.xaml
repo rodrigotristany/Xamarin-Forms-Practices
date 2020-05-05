@@ -5,21 +5,26 @@
              xmlns:effects="clr-namespace:Sharpnado.Presentation.Forms.Effects;assembly=Sharpnado.Presentation.Forms"
              xmlns:localization="clr-namespace:SillyCompany.Mobile.Practices.Localization;assembly=SillyCompany.Mobile.Practices">
     <ContentView.Content>
-        <Grid ColumnSpacing="0" RowSpacing="0">
+        <Grid RowSpacing="0" ColumnSpacing="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="{Binding SourceUrl, Converter={StaticResource NullToValueConverter}, ConverterParameter=40}" />
+                <RowDefinition Height="{Binding SourceUrl, Converter={StaticResource NullToValueConverter}, ConverterParameter=70}" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0"
-                   Style="{StaticResource TextSubhead}"
-                   effects:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
-                   effects:TapCommandEffect.TapParameter="{Binding SourceUrl}"
-                   effects:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
-                   IsVisible="{Binding SourceUrl, Converter={StaticResource IsNotNullConverter}}"
-                   Text="{localization:Translate SillyDude_GoToSource}"
-                   TextColor="{StaticResource Accent}"
-                   VerticalTextAlignment="End" />
+            <Button Grid.Row="0"
+                    IsVisible="{Binding SourceUrl, Converter={StaticResource IsNotNullConverter}}"
+                    WidthRequest="180"
+                    Margin="0,30,0,10"
+                    Padding="5"
+                    HorizontalOptions="Start"
+                    VerticalOptions="End"
+                    BackgroundColor="Transparent"
+                    BorderColor="{StaticResource Accent}"
+                    BorderWidth="1"
+                    TextColor="{StaticResource Accent}"
+                    Command="{Binding OnItemTappedCommand}"
+                    CommandParameter="{Binding SourceUrl}"
+                    Text="{localization:Translate SillyDude_GoToSource}" />
 
             <Frame Grid.Row="1"
                    Padding="0,16,0,0"

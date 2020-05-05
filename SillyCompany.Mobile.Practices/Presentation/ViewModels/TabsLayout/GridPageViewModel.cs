@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Sharpnado.Infrastructure.Services;
-using Sharpnado.Infrastructure.Tasks;
+
+using Sharpnado.Presentation.Forms;
 using Sharpnado.Presentation.Forms.Paging;
+using Sharpnado.Presentation.Forms.Services;
 using Sharpnado.Presentation.Forms.ViewModels;
-using SillyCompany.Mobile.Practices.Domain;
 using SillyCompany.Mobile.Practices.Domain.Silly;
-using SillyCompany.Mobile.Practices.Localization;
+using SillyCompany.Mobile.Practices.Infrastructure;
 using SillyCompany.Mobile.Practices.Presentation.Commands;
 using SillyCompany.Mobile.Practices.Presentation.Navigables;
 using SillyCompany.Mobile.Practices.Presentation.ViewModels.DudeDetails;
@@ -27,6 +27,8 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
         private int _currentIndex = -1;
 
+        private int? _selectedDudeId;
+
         public GridPageViewModel(INavigationService navigationService, ISillyDudeService sillyDudeService)
             : base(navigationService)
         {
@@ -36,9 +38,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
             SillyPeople = new ObservableRangeCollection<SillyDudeVmo>();
             SillyPeoplePaginator = new Paginator<SillyDude>(LoadSillyPeoplePageAsync, pageSize: PageSize);
-            SillyPeopleLoader = new ViewModelLoader<IReadOnlyCollection<SillyDude>>(
-                ApplicationExceptions.ToString,
-                SillyResources.Empty_Screen);
+            SillyPeopleLoaderNotifier = new TaskLoaderNotifier<IReadOnlyCollection<SillyDude>>();
         }
 
         public int CurrentIndex
@@ -53,7 +53,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
         public ICommand OnScrollEndCommand { get; private set; }
 
-        public ViewModelLoader<IReadOnlyCollection<SillyDude>> SillyPeopleLoader { get; }
+        public TaskLoaderNotifier<IReadOnlyCollection<SillyDude>> SillyPeopleLoaderNotifier { get; }
 
         public Paginator<SillyDude> SillyPeoplePaginator { get; }
 
@@ -63,17 +63,32 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             set => SetAndRaise(ref _sillyPeople, value);
         }
 
+        public int? SelectedDudeId
+        {
+            get => _selectedDudeId;
+            set => SetAndRaise(ref _selectedDudeId, value);
+        }
+
         public override void Load(object parameter)
         {
             SillyPeople = new ObservableRangeCollection<SillyDudeVmo>();
 
-            SillyPeopleLoader.Load(async () => (await SillyPeoplePaginator.LoadPage(1)).Items);
+            SillyPeopleLoaderNotifier.Load(async () => (await SillyPeoplePaginator.LoadPage(1)).Items);
         }
 
         private void InitCommands()
         {
             GoToSillyDudeCommand = AsyncCommand.Create(
-                parameter => NavigationService.NavigateToAsync<SillyDudeVm>(((SillyDudeVmo)parameter).Id));
+                parameter =>
+                {
+                    SelectedDudeId = ((SillyDudeVmo)parameter).Id;
+                    if (PlatformService.IsFoldingScreen)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    return NavigationService.NavigateToAsync<SillyDudeVm>(((SillyDudeVmo)parameter).Id);
+                });
 
             OnScrollBeginCommand = new Command(
                 () => System.Diagnostics.Debug.WriteLine("SillyInfiniteGridPeopleVm: OnScrollBeginCommand"));
@@ -94,7 +109,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             SillyPeople.AddRange(viewModels);
 
             // Uncomment to test CurrentIndex property
-            // NotifyTask.Create(
+            // TaskMonitor.Create(
             //    async () =>
             //    {
             //        await Task.Delay(2000);
@@ -102,7 +117,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             //    });
 
             // Uncomment to test Reset action
-            // NotifyTask.Create(
+            // TaskMonitor.Create(
             //   async () =>
             //   {
             //       await Task.Delay(6000);

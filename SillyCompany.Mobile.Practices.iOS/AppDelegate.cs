@@ -5,6 +5,7 @@ using ImageCircle.Forms.Plugin.iOS;
 using ObjCRuntime;
 using Refractored.XamForms.PullToRefresh.iOS;
 
+using Sharpnado.MaterialFrame.iOS;
 using Sharpnado.Presentation.Forms.iOS;
 using Sharpnado.Presentation.Forms.iOS.Renderers.HorizontalList;
 using SillyCompany.Mobile.Practices.Infrastructure;
@@ -45,7 +46,7 @@ namespace SillyCompany.Mobile.Practices.iOS
                 ImageCircleRenderer.Init();
                 PullToRefreshLayoutRenderer.Init();
                 SharpnadoInitializer.Initialize(enableInternalLogger: true);
-                FFImageLoading.FormsHandler.Init(debug: true);
+                Xamarin.Forms.Nuke.FormsHandler.Init(debug: true);
 
                 UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes
                 {

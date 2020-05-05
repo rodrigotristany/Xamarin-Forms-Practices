@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sharpnado.Infrastructure.Services;
+using Sharpnado.Presentation.Forms.Services;
 
 namespace SillyCompany.Mobile.Practices.Domain.Silly
 {
@@ -12,6 +12,6 @@ namespace SillyCompany.Mobile.Practices.Domain.Silly
 
         Task<SillyDude> GetSilly(int id);
 
-        Task<SillyDude> GetRandomSilly();
+        Task<SillyDude> GetRandomSilly(int waitTime = 2);
     }
 }

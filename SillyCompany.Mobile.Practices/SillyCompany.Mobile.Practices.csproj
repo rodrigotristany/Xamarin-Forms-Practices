@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <CodeAnalysisRuleSet>..\Sharpnado.Presentation.Forms\Sharpnado.Infrastructure\StyleCopRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
     <Configurations>Debug;Release;DebugInfinite</Configurations>
+    <CodeAnalysisRuleSet>..\Sharpnado.Presentation.Forms\StyleCopRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugInfinite|AnyCPU'">
@@ -20,25 +21,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiveXAML" Version="2.1.73" />
     <PackageReference Include="MetroLog" Version="1.0.1" />
     <PackageReference Include="Refractored.XamForms.PullToRefresh" Version="2.4.1.1-beta" />
-    <PackageReference Include="SimpleInjector" Version="4.7.1" />    
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="Sharpnado.MaterialFrame" Version="1.0.0" />
+    <PackageReference Include="Sharpnado.TaskLoaderView" Version="2.0.0" />
+    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.0" />
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />    
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Xam.Forms.MarkdownView" Version="0.6.1-pre" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.2.0.815419</Version>
+      <Version>4.5.0.495</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms.DebugRainbows" Version="1.0.16" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sharpnado.Presentation.Forms\Sharpnado.Infrastructure\Sharpnado.Infrastructure.csproj" />
     <ProjectReference Include="..\Sharpnado.Presentation.Forms\Sharpnado.Presentation.Forms\Sharpnado.Presentation.Forms.csproj" />
   </ItemGroup>
 
@@ -73,8 +74,14 @@
     <Compile Update="Presentation\Views\AlternateSillySquareCell.xaml.cs">
       <DependentUpon>AlternateSillySquareCell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Presentation\Views\SmallSillySquareCell.xaml.cs">
+      <DependentUpon>SmallSillySquareCell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Presentation\Views\SortSillyPeoplePage.xaml.cs">
       <DependentUpon>SortSillyPeoplePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Presentation\Views\SurfaceDuo\TwoPanePage.xaml.cs">
+      <DependentUpon>TwoPanePage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Presentation\Views\TabsLayout\GridView.xaml.cs">
       <DependentUpon>GridView.xaml</DependentUpon>
@@ -112,6 +119,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Presentation\Views\SortSillyPeoplePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Presentation\Views\SurfaceDuo\TwoPanePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Presentation\Views\TabsLayout\GridView.xaml">

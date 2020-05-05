@@ -10,18 +10,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Sharpnado.Infrastructure.Services;
-using Sharpnado.Infrastructure.Tasks;
+using Sharpnado.Presentation.Forms;
 using Sharpnado.Presentation.Forms.Paging;
+using Sharpnado.Presentation.Forms.Services;
 using Sharpnado.Presentation.Forms.ViewModels;
-using SillyCompany.Mobile.Practices.Domain;
 using SillyCompany.Mobile.Practices.Domain.Silly;
 using SillyCompany.Mobile.Practices.Infrastructure;
-using SillyCompany.Mobile.Practices.Localization;
 using SillyCompany.Mobile.Practices.Presentation.Commands;
 using SillyCompany.Mobile.Practices.Presentation.Navigables;
 using SillyCompany.Mobile.Practices.Presentation.ViewModels.DudeDetails;
-
 using Xamarin.Forms;
 
 namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
@@ -33,7 +30,10 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
 
         private int _currentIndex = -1;
 
-        public SillyInfinitePeopleVm(INavigationService navigationService, ISillyDudeService sillyDudeService, ErrorEmulator errorEmulator)
+        public SillyInfinitePeopleVm(
+            INavigationService navigationService,
+            ISillyDudeService sillyDudeService,
+            ErrorEmulator errorEmulator)
             : base(navigationService)
         {
             _sillyDudeService = sillyDudeService;
@@ -42,10 +42,11 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
             ErrorEmulator = new ErrorEmulatorVm(errorEmulator, Load);
 
             SillyPeople = new ObservableRangeCollection<SillyDudeVmo>();
-            SillyPeoplePaginator = new Paginator<SillyDude>(LoadSillyPeoplePageAsync, pageSize: PageSize, loadingThreshold: 0.1f);
-            SillyPeopleLoader = new ViewModelLoader<IReadOnlyCollection<SillyDude>>(
-                ApplicationExceptions.ToString,
-                SillyResources.Empty_Screen);
+            SillyPeoplePaginator = new Paginator<SillyDude>(
+                LoadSillyPeoplePageAsync,
+                pageSize: PageSize,
+                loadingThreshold: 0.1f);
+            SillyPeopleLoaderNotifier = new TaskLoaderNotifier<IReadOnlyCollection<SillyDude>>();
         }
 
         public int CurrentIndex
@@ -58,7 +59,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
 
         public SillyDudeVmo SillyOfTheDay { get; private set; }
 
-        public ViewModelLoader<IReadOnlyCollection<SillyDude>> SillyPeopleLoader { get; }
+        public TaskLoaderNotifier<IReadOnlyCollection<SillyDude>> SillyPeopleLoaderNotifier { get; }
 
         public Paginator<SillyDude> SillyPeoplePaginator { get; }
 
@@ -86,13 +87,14 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
             SillyPeople = new ObservableRangeCollection<SillyDudeVmo>();
             RaisePropertyChanged(nameof(SillyPeople));
 
-            SillyPeopleLoader.Load(async () =>
-            {
-                SillyOfTheDay = new SillyDudeVmo(await _sillyDudeService.GetRandomSilly(), GoToSillyDudeCommand);
-                RaisePropertyChanged(nameof(SillyOfTheDay));
+            SillyPeopleLoaderNotifier.Load(
+                async () =>
+                {
+                    SillyOfTheDay = new SillyDudeVmo(await _sillyDudeService.GetRandomSilly(), GoToSillyDudeCommand);
+                    RaisePropertyChanged(nameof(SillyOfTheDay));
 
-                return (await SillyPeoplePaginator.LoadPage(1)).Items;
-            });
+                    return (await SillyPeoplePaginator.LoadPage(1)).Items;
+                });
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels
             SillyPeople.AddRange(viewModels);
 
             // Uncomment to test CurrentIndex property
-            //NotifyTask.Create(
+            //TaskMonitor.Create(
             //   async () =>
             //   {
             //       await Task.Delay(2000);

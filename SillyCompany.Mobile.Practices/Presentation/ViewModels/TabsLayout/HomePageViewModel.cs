@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+
+using Sharpnado.Presentation.Forms;
 using Sharpnado.Presentation.Forms.ViewModels;
 using SillyCompany.Mobile.Practices.Domain.Silly;
+using SillyCompany.Mobile.Practices.Infrastructure;
 using SillyCompany.Mobile.Practices.Presentation.Commands;
 using SillyCompany.Mobile.Practices.Presentation.Navigables;
 using SillyCompany.Mobile.Practices.Presentation.ViewModels.DudeDetails;
@@ -18,10 +21,10 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             _sillyDudeService = sillyDudeService;
             InitCommands();
 
-            SillyDudeLoader = new ViewModelLoader<SillyDudeVmo>();
+            SillyDudeLoaderNotifier = new TaskLoaderNotifier<SillyDudeVmo>();
         }
 
-        public ViewModelLoader<SillyDudeVmo> SillyDudeLoader { get; }
+        public TaskLoaderNotifier<SillyDudeVmo> SillyDudeLoaderNotifier { get; }
 
         /// <summary>
         /// Commands accessible directly on screen are declared in the ScreenVm.
@@ -31,7 +34,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
         public override void Load(object parameter)
         {
-            SillyDudeLoader.Load(InitializationTask);
+            SillyDudeLoaderNotifier.Load(InitializationTask);
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
         private async Task<SillyDudeVmo> InitializationTask()
         {
-            var dude = await _sillyDudeService.GetRandomSilly();
+            var dude = await _sillyDudeService.GetRandomSilly(1);
             return new SillyDudeVmo(dude, GoToSillyDudeCommand);
         }
 
@@ -56,6 +59,11 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             if (sillyDude.Role == "Knights")
             {
                 throw new InvalidOperationException("The knights demand...... A SACRIFICE!");
+            }
+
+            if (PlatformService.IsFoldingScreen)
+            {
+                return;
             }
 
             await NavigationService.NavigateToAsync<SillyDudeVm>(sillyDude.Id);
