@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+using Sharpnado.HorizontalListView.Paging;
+using Sharpnado.HorizontalListView.Services;
+using Sharpnado.HorizontalListView.ViewModels;
 using Sharpnado.Presentation.Forms;
-using Sharpnado.Presentation.Forms.Paging;
-using Sharpnado.Presentation.Forms.Services;
-using Sharpnado.Presentation.Forms.ViewModels;
 
 using SillyCompany.Mobile.Practices.Domain.Silly;
 using SillyCompany.Mobile.Practices.Infrastructure;
@@ -60,6 +59,8 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
 
         public ObservableRangeCollection<SillyDudeVmo> SillyPeople { get; set; }
 
+        public int SillyCount => SillyPeople.Count;
+
         /// <summary>
         /// Commands accessible directly on screen are declared in the ScreenVm.
         /// Here, it is a command to navigate to the second screen.
@@ -103,6 +104,8 @@ namespace SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout
             var viewModels = resultPage.Items.Select(dude => new SillyDudeVmo(dude, GoToSillyDudeCommand)).ToList();
 
             SillyPeople.AddRange(viewModels);
+
+            RaisePropertyChanged(nameof(SillyCount));
 
             // Uncomment to test CurrentIndex property
             //TaskMonitor.Create(

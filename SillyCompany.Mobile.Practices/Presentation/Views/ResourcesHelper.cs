@@ -1,9 +1,6 @@
 ﻿using System;
 
 using Sharpnado.MaterialFrame;
-using Sharpnado.Presentation.Forms.RenderedViews;
-
-using SillyCompany.Mobile.Practices.Presentation.Views.TabsLayout;
 
 using Xamarin.Forms;
 
@@ -24,10 +21,12 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views
         public const string DynamicBarTextColor = nameof(DynamicBarTextColor);
         public const string DynamicHeaderTextColor = nameof(DynamicHeaderTextColor);
 
-        public const string DynamicTopShadow = nameof(DynamicTopShadow);
-        public const string DynamicBottomShadow = nameof(DynamicBottomShadow);
+        public const string DynamicBottomTabsShadow = nameof(DynamicBottomTabsShadow);
+        public const string DynamicTabsShadow = nameof(DynamicTabsShadow);
+        public const string DynamicShadow = nameof(DynamicShadow);
+        public const string DynamicToolbarShadow = nameof(DynamicToolbarShadow);
 
-        public const string DynamicHasShadow = nameof(DynamicHasShadow);
+        public const string DynamicOutlineColor = nameof(DynamicOutlineColor);
 
         public const string Elevation4dpColor = nameof(Elevation4dpColor);
 
@@ -107,9 +106,12 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views
 
             SetDynamicResource(DynamicIsVisible, false);
 
-            SetDynamicResource(DynamicTopShadow, ShadowType.None);
-            SetDynamicResource(DynamicBottomShadow, ShadowType.None);
-            SetDynamicResource(DynamicHasShadow, false);
+            SetDynamicResource(DynamicBottomTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicShadow, "NoShadow");
+            SetDynamicResource(DynamicToolbarShadow, "NoShadow");
+
+            SetDynamicResource(DynamicOutlineColor, "Accent");
 
             SetDynamicResource(DynamicIsTabBlurVisible, false);
             SetDynamicResource(DynamicBottomBarBackground, "DarkElevation4dp");
@@ -141,12 +143,52 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views
 
             SetDynamicResource(DynamicIsVisible, false);
 
-            SetDynamicResource(DynamicTopShadow,  isAcrylic ? ShadowType.AcrylicTop : ShadowType.Top);
-            SetDynamicResource(DynamicBottomShadow, ShadowType.Bottom);
-            SetDynamicResource(DynamicHasShadow, true);
+            SetDynamicResource(DynamicBottomTabsShadow, isAcrylic ? "AcrylicTopShadow" : "LightTopShadow");
+            SetDynamicResource(DynamicTabsShadow, "SegmentedBottomShadow");
+            SetDynamicResource(DynamicToolbarShadow, "LightBottomShadow");
+            SetDynamicResource(DynamicShadow, "NoShadow");
+
+            SetDynamicResource(DynamicOutlineColor, "Accent");
 
             SetDynamicResource(DynamicIsTabBlurVisible, false);
-            SetDynamicResource(DynamicBottomBarBackground, "AcrylicFrameBackgroundColor");
+            SetDynamicResource(DynamicBottomBarBackground, isAcrylic ? "AcrylicFrameBackgroundColor" : "OnSurfaceColor");
+
+            SetDynamicResource(DynamicBackgroundImageSource, new FileImageSource());
+        }
+
+        public static void SetNeumorphicMode()
+        {
+            SetDynamicResource(DynamicMaterialTheme, MaterialFrame.Theme.Light);
+            SetDynamicResource(DynamicBlurTheme, MaterialFrame.Theme.Light);
+
+            SetDynamicResource(DynamicNavigationBarColor, "Accent");
+
+            SetDynamicResource(DynamicBarTextColor, "TextPrimaryDarkColor");
+            SetDynamicResource(DynamicHeaderTextColor, "TextPrimaryLightColor");
+            SetDynamicResource(DynamicPrimaryTextColor, "TextPrimaryLightColor");
+            SetDynamicResource(DynamicSecondaryTextColor, "TextSecondaryLightColor");
+
+            SetDynamicResource(DynamicBackgroundColor, "NeumorphismSurface" );
+            SetDynamicResource(DynamicDudeBackgroundColor, "NeumorphismSurface");
+
+            SetDynamicResource(Elevation4dpColor, "NeumorphismSurface");
+
+            SetDynamicResource(DynamicLightThemeColor, "NeumorphismSurface");
+
+            SetDynamicResource(DynamicElevation, 0);
+            SetDynamicResource(DynamicCornerRadius, 10);
+
+            SetDynamicResource(DynamicIsVisible, false);
+
+            SetDynamicResource(DynamicBottomTabsShadow, "ThinNeumorphismShadow");
+            SetDynamicResource(DynamicTabsShadow, "ThinNeumorphismShadow");
+            SetDynamicResource(DynamicToolbarShadow, "LightBottomShadow");
+            SetDynamicResource(DynamicShadow, "ThinNeumorphismShadow");
+
+            SetDynamicResource(DynamicOutlineColor, Color.Default);
+
+            SetDynamicResource(DynamicIsTabBlurVisible, false);
+            SetDynamicResource(DynamicBottomBarBackground, "NeumorphismSurface");
 
             SetDynamicResource(DynamicBackgroundImageSource, new FileImageSource());
         }
@@ -170,9 +212,12 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views
 
             SetDynamicResource(DynamicIsVisible, false);
 
-            SetDynamicResource(DynamicTopShadow, ShadowType.None);
-            SetDynamicResource(DynamicBottomShadow, ShadowType.None);
-            SetDynamicResource(DynamicHasShadow, true);
+            SetDynamicResource(DynamicBottomTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicToolbarShadow, "NoShadow");
+            SetDynamicResource(DynamicShadow, "NoShadow");
+
+            SetDynamicResource(DynamicOutlineColor, Color.Default);
 
             SetDynamicResource(DynamicIsTabBlurVisible, true);
             SetDynamicResource(DynamicBottomTabBlurStyle, MaterialFrame.BlurStyle.Dark);
@@ -204,13 +249,16 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views
 
             SetDynamicResource(DynamicIsVisible, true);
 
-            SetDynamicResource(DynamicTopShadow, ShadowType.None);
-            SetDynamicResource(DynamicBottomShadow, ShadowType.None);
-            SetDynamicResource(DynamicHasShadow, false);
+            SetDynamicResource(DynamicBottomTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicTabsShadow, "NoShadow");
+            SetDynamicResource(DynamicToolbarShadow, "NoShadow");
+            SetDynamicResource(DynamicShadow, "NoShadow");
 
             SetDynamicResource(DynamicIsTabBlurVisible, true);
             SetDynamicResource(DynamicBottomTabBlurStyle, MaterialFrame.BlurStyle.Light);
             SetDynamicResource(DynamicBottomBarBackground, Color.Transparent);
+
+            SetDynamicResource(DynamicOutlineColor, Color.Default);
 
             SetDynamicResource(DynamicMaterialTheme, MaterialFrame.Theme.AcrylicBlur);
             SetDynamicResource(DynamicBlurTheme, MaterialFrame.Theme.AcrylicBlur);

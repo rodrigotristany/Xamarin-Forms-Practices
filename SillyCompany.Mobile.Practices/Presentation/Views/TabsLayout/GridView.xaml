@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <ContentView x:Class="SillyCompany.Mobile.Practices.Presentation.Views.TabsLayout.GridView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
              xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
-             xmlns:effects="clr-namespace:Sharpnado.Presentation.Forms.Effects;assembly=Sharpnado.Presentation.Forms"
-             xmlns:renderedViews="clr-namespace:Sharpnado.Presentation.Forms.RenderedViews;assembly=Sharpnado.Presentation.Forms"
+             xmlns:materialFrame="clr-namespace:Sharpnado.MaterialFrame;assembly=Sharpnado.MaterialFrame"
+             xmlns:shades="clr-namespace:Sharpnado.Shades;assembly=Sharpnado.Shadows"
+             xmlns:sho="http://sharpnado.com"
              xmlns:tabsLayout="clr-namespace:SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout;assembly=SillyCompany.Mobile.Practices"
-             xmlns:viewModels="clr-namespace:SillyCompany.Mobile.Practices.Presentation.ViewModels;assembly=SillyCompany.Mobile.Practices"
-             xmlns:views="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Views;assembly=SillyCompany.Mobile.Practices"
-             xmlns:materialFrame="clr-namespace:Sharpnado.MaterialFrame;assembly=Sharpnado.MaterialFrame">
+             xmlns:views="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Views;assembly=SillyCompany.Mobile.Practices">
 
     <d:ContentView.BindingContext>
         <tabsLayout:GridPageViewModel />
@@ -20,9 +19,9 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <Style x:Key="HorizontalListView" TargetType="renderedViews:HorizontalListView">
+            <Style x:Key="HorizontalListView" TargetType="sho:HorizontalListView">
                 <Setter Property="ItemHeight" Value="130" />
-                <Setter Property="CollectionPadding" Value="10,145,10,75" />
+                <Setter Property="CollectionPadding" Value="10,20,10,75" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
@@ -32,40 +31,40 @@
             <RefreshView IsRefreshing="{Binding SillyPeopleLoaderNotifier.ShowRefresher}"
                          RefreshColor="{StaticResource Accent}"
                          Command="{Binding SillyPeopleLoaderNotifier.RefreshCommand}">
-                <renderedViews:HorizontalListView Style="{StaticResource HorizontalListView}"
-                                                  ColumnCount="1"
-                                                  CurrentIndex="{Binding CurrentIndex}"
-                                                  EnableDragAndDrop="True"
-                                                  InfiniteListLoader="{Binding SillyPeoplePaginator}"
-                                                  ListLayout="Grid"
-                                                  ScrollBeganCommand="{Binding OnScrollBeginCommand}"
-                                                  ScrollEndedCommand="{Binding OnScrollEndCommand}"
-                                                  ItemsSource="{Binding SillyPeople}">
+                <sho:HorizontalListView Style="{StaticResource HorizontalListView}"
+                                        ColumnCount="1"
+                                        CurrentIndex="{Binding CurrentIndex}"
+                                        EnableDragAndDrop="True"
+                                        InfiniteListLoader="{Binding SillyPeoplePaginator}"
+                                        ListLayout="Grid"
+                                        ScrollBeganCommand="{Binding OnScrollBeginCommand}"
+                                        ScrollEndedCommand="{Binding OnScrollEndCommand}"
+                                        TapCommand="{Binding GoToSillyDudeCommand}"
+                                        ItemsSource="{Binding SillyPeople}">
                     <!--  TapCommand="{Binding GoToSillyDudeCommand}">  -->
                     <!--  ColumnCount="3"  -->
-                    <renderedViews:HorizontalListView.ItemTemplate>
+                    <sho:HorizontalListView.ItemTemplate>
                         <DataTemplate>
-                            <renderedViews:DraggableViewCell x:Name="DraggableViewCell" IsDraggable="{Binding IsMovable}">
-                                <ContentView Padding="5,5,5,10"
-                                             effects:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
-                                             effects:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
-                                             effects:TapCommandEffect.TapParameter="{Binding .}">
-                                    <views:SillyCell Margin="4"
-                                                     Padding="{StaticResource StandardThickness}"
-                                                     Elevation="{DynamicResource DynamicElevation}">
-                                        <Frame.Triggers>
-                                            <DataTrigger Binding="{Binding Source={x:Reference DraggableViewCell}, Path=IsDragAndDropping}"
-                                                         TargetType="materialFrame:MaterialFrame"
-                                                         Value="True">
-                                                <Setter Property="Elevation" Value="8" />
-                                            </DataTrigger>
-                                        </Frame.Triggers>
-                                    </views:SillyCell>
+                            <sho:DraggableViewCell x:Name="DraggableViewCell" IsDraggable="{Binding IsMovable}">
+                                <ContentView>
+                                    <shades:Shadows CornerRadius="{DynamicResource DynamicCornerRadius}" Shades="{DynamicResource DynamicShadow}">
+                                        <views:SillyCell Margin="16,7,16,13"
+                                                         Padding="{StaticResource StandardThickness}"
+                                                         Elevation="{DynamicResource DynamicElevation}">
+                                            <Frame.Triggers>
+                                                <DataTrigger Binding="{Binding Source={x:Reference DraggableViewCell}, Path=IsDragAndDropping}"
+                                                             TargetType="materialFrame:MaterialFrame"
+                                                             Value="True">
+                                                    <Setter Property="Elevation" Value="8" />
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                        </views:SillyCell>
+                                    </shades:Shadows>
                                 </ContentView>
-                            </renderedViews:DraggableViewCell>
+                            </sho:DraggableViewCell>
                         </DataTemplate>
-                    </renderedViews:HorizontalListView.ItemTemplate>
-                </renderedViews:HorizontalListView>
+                    </sho:HorizontalListView.ItemTemplate>
+                </sho:HorizontalListView>
             </RefreshView>
         </customViews:TaskLoaderView>
     </ContentView.Content>

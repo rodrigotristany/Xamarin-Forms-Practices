@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <ContentView x:Class="SillyCompany.Mobile.Practices.Presentation.Views.TabsLayout.ListView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.Presentation.Forms"
              xmlns:loader="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:localization="clr-namespace:SillyCompany.Mobile.Practices.Localization;assembly=SillyCompany.Mobile.Practices"
-             xmlns:materialFrame="clr-namespace:Sharpnado.MaterialFrame;assembly=Sharpnado.MaterialFrame"
-             xmlns:renderedViews="clr-namespace:Sharpnado.Presentation.Forms.RenderedViews;assembly=Sharpnado.Presentation.Forms"
+             xmlns:sho="http://sharpnado.com"
              xmlns:tabsLayout="clr-namespace:SillyCompany.Mobile.Practices.Presentation.ViewModels.TabsLayout;assembly=SillyCompany.Mobile.Practices">
 
     <d:ContentView.BindingContext>
@@ -17,19 +16,12 @@
     </d:ContentView.BindingContext>
 
     <ContentView.Content>
-        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-
+        <ScrollView>
             <Grid RowSpacing="0"
                   ColumnSpacing="0"
                   AbsoluteLayout.LayoutFlags="All"
                   AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                   Padding="{StaticResource StandardThickness}">
-                <Grid.Margin>
-                    <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="iOS">0,140,0,0</On>
-                        <On Platform="Android">0,120,0,0</On>
-                    </OnPlatform>
-                </Grid.Margin>
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
@@ -45,27 +37,30 @@
                        Text="{localization:Translate SillyPeople_TaskLoaderView}" />
 
                 <!--  ROW 1: TaskLoaderView Configuration  -->
-                <materialFrame:MaterialFrame Grid.Row="1"
-                                             Margin="0,16"
-                                             Padding="16,10"
-                                             Elevation="{DynamicResource DynamicElevation}"
-                                             LightThemeBackgroundColor="{DynamicResource DynamicLightThemeColor}">
-                    <StackLayout Spacing="10" Orientation="Horizontal">
+                <sho:Shadows Grid.Row="1"
+                             CornerRadius="{DynamicResource DynamicCornerRadius}"
+                             Shades="{DynamicResource DynamicShadow}">
+                    <sho:MaterialFrame Margin="0,16"
+                                       Padding="16,10"
+                                       Elevation="{DynamicResource DynamicElevation}"
+                                       LightThemeBackgroundColor="{DynamicResource DynamicLightThemeColor}">
+                        <StackLayout Spacing="10" Orientation="Horizontal">
 
-                        <Label Style="{StaticResource TextBody}"
-                               VerticalOptions="Center"
-                               Text="{localization:Translate SillyPeople_ErrorEmulation}" />
+                            <Label Style="{StaticResource TextBody}"
+                                   VerticalOptions="Center"
+                                   Text="{localization:Translate SillyPeople_ErrorEmulation}" />
 
-                        <Picker x:Name="Picker"
-                                HorizontalOptions="FillAndExpand"
-                                BackgroundColor="Transparent"
-                                FontFamily="{StaticResource FontSemiBold}"
-                                FontSize="Small"
-                                TextColor="{StaticResource Accent}"
-                                SelectedIndex="{Binding ErrorEmulator.SelectedIndex}"
-                                ItemsSource="{Binding ErrorEmulator.ErrorTypes}" />
-                    </StackLayout>
-                </materialFrame:MaterialFrame>
+                            <Picker x:Name="Picker"
+                                    HorizontalOptions="FillAndExpand"
+                                    BackgroundColor="Transparent"
+                                    FontFamily="{StaticResource FontSemiBold}"
+                                    FontSize="Small"
+                                    TextColor="{StaticResource Accent}"
+                                    SelectedIndex="{Binding ErrorEmulator.SelectedIndex}"
+                                    ItemsSource="{Binding ErrorEmulator.ErrorTypes}" />
+                        </StackLayout>
+                    </sho:MaterialFrame>
+                </sho:Shadows>
 
                 <!--  ROW 2: TaskLoaderView Container  -->
                 <loader:TaskLoaderView Grid.Row="2"
@@ -75,7 +70,14 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="60" />
-                            <RowDefinition Height="280" />
+                            <RowDefinition>
+                                <RowDefinition.Height>
+                                    <OnPlatform x:TypeArguments="GridLength">
+                                        <On Platform="iOS">320</On>
+                                        <On Platform="Android">280</On>
+                                    </OnPlatform>
+                                </RowDefinition.Height>
+                            </RowDefinition>
                         </Grid.RowDefinitions>
 
                         <!--  ROW 0: HorizontalListView Header  -->
@@ -89,20 +91,25 @@
                                Text="{localization:Translate SillyPeople_InfiniteListView}" />
 
                         <!--  ROW 3: HorizontalListView  -->
-                        <renderedViews:HorizontalListView Grid.Row="1"
-                                                          Margin="-16,8"
-                                                          CollectionPadding="30,10,30,10"
-                                                          ColumnCount="1"
-                                                          CurrentIndex="{Binding CurrentIndex}"
-                                                          EnableDragAndDrop="True"
-                                                          InfiniteListLoader="{Binding SillyPeoplePaginator}"
-                                                          ItemSpacing="10"
-                                                          ListLayout="Linear"
-                                                          SnapStyle="Center"
-                                                          ScrollBeganCommand="{Binding OnScrollBeginCommand}"
-                                                          ScrollEndedCommand="{Binding OnScrollEndCommand}"
-                                                          ItemTemplate="{StaticResource DudeTemplateSelector}"
-                                                          ItemsSource="{Binding SillyPeople}">
+                        <sho:HorizontalListView Grid.Row="1"
+                                                Margin="-16,0"
+                                                ColumnCount="1"
+                                                CurrentIndex="{Binding CurrentIndex}"
+                                                EnableDragAndDrop="True"
+                                                InfiniteListLoader="{Binding SillyPeoplePaginator}"
+                                                ItemSpacing="0"
+                                                ListLayout="Linear"
+                                                SnapStyle="Center"
+                                                ScrollBeganCommand="{Binding OnScrollBeginCommand}"
+                                                ScrollEndedCommand="{Binding OnScrollEndCommand}"
+                                                ItemTemplate="{StaticResource DudeTemplateSelector}"
+                                                ItemsSource="{Binding SillyPeople}">
+                            <sho:HorizontalListView.CollectionPadding>
+                                <OnPlatform x:TypeArguments="Thickness">
+                                    <On Platform="iOS">50,10</On>
+                                    <On Platform="Android">60,10</On>
+                                </OnPlatform>
+                            </sho:HorizontalListView.CollectionPadding>
 
                             <!--  ItemHeight="144" ItemWidth="144" SnapStyle="Center"  -->
                             <!--<renderedViews:HorizontalListView.ItemTemplate>
@@ -115,12 +122,12 @@
                                 </DataTemplate>
                             </renderedViews:HorizontalListView.ItemTemplate>-->
 
-                        </renderedViews:HorizontalListView>
+                        </sho:HorizontalListView>
                     </Grid>
                 </loader:TaskLoaderView>
 
             </Grid>
 
-        </AbsoluteLayout>
+        </ScrollView>
     </ContentView.Content>
 </ContentView>

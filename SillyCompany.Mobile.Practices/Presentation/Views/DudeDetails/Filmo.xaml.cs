@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sharpnado.Presentation.Forms.CustomViews;
+using Sharpnado.Tabs;
+
 using Xam.Forms.Markdown;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -39,7 +41,7 @@ namespace SillyCompany.Mobile.Practices.Presentation.Views.DudeDetails
 
                 Paragraph.FontFamily = Application.Current.Resources["FontSemiBold"] as string;
                 Paragraph.ForegroundColor = (Color)Application.Current.Resources["DynamicPrimaryTextColor"];
-                Paragraph.FontSize = 16;
+                Paragraph.FontSize = 14;
             }
         }
     }

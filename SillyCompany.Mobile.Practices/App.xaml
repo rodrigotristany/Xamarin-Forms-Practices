@@ -2,18 +2,15 @@
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Converters;assembly=SillyCompany.Mobile.Practices"
-             xmlns:convertersSharpnado="clr-namespace:Sharpnado.Presentation.Forms.Converters;assembly=Sharpnado.Presentation.Forms"
-             xmlns:effects="clr-namespace:Sharpnado.Presentation.Forms.Effects;assembly=Sharpnado.Presentation.Forms"
              xmlns:loader="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:localization="clr-namespace:SillyCompany.Mobile.Practices.Localization;assembly=SillyCompany.Mobile.Practices"
-             xmlns:mf="clr-namespace:Sharpnado.MaterialFrame;assembly=Sharpnado.MaterialFrame"
-             xmlns:tabs="clr-namespace:Sharpnado.Presentation.Forms.CustomViews.Tabs;assembly=Sharpnado.Presentation.Forms"
+             xmlns:sho="http://sharpnado.com"
              xmlns:views="clr-namespace:SillyCompany.Mobile.Practices.Presentation.Views;assembly=SillyCompany.Mobile.Practices">
     <Application.Resources>
         <ResourceDictionary>
 
-            <convertersSharpnado:IsNotNullConverter x:Key="IsNotNullConverter" />
-            <convertersSharpnado:IsNullConverter x:Key="IsNullConverter" />
+            <converters:IsNotNullConverter x:Key="IsNotNullConverter" />
+            <converters:IsNullConverter x:Key="IsNullConverter" />
             <converters:NullToValueConverter x:Key="NullToValueConverter" />
             <converters:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
             <converters:ExceptionToImageSourceConverter x:Key="ExceptionToImageSourceConverter" />
@@ -37,16 +34,13 @@
                 </Thickness.Top>
             </Thickness>
 
-            <OnPlatform x:Key="BottomBarHeight" x:TypeArguments="GridLength">
-                <On Platform="iOS">65</On>
-                <On Platform="Android">65</On>
-            </OnPlatform>
-
             <GridLength x:Key="HeaderHeight">40</GridLength>
 
             <Color x:Key="DarkSurface">#121212</Color>
-            <Color x:Key="LightSurface">#02FF0266</Color>
+            <!--  Very light accent color  -->
+            <Color x:Key="LightSurface">#FAF8F9</Color>
             <Color x:Key="AcrylicSurface">#E4E4E4</Color>
+            <Color x:Key="NeumorphismSurface">#F0F0F3</Color>
 
             <Color x:Key="DarkElevation2dp">#212121</Color>
             <Color x:Key="DarkElevation4dp">#272727</Color>
@@ -333,17 +327,17 @@
 
             <DataTemplate x:Key="SillyDataTemplate">
                 <ViewCell>
-                    <views:SillySquareCell effects:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
-                                           effects:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
-                                           effects:TapCommandEffect.TapParameter="{Binding .}" />
+                    <views:SillySquareCell sho:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
+                                           sho:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
+                                           sho:TapCommandEffect.TapParameter="{Binding .}" />
                 </ViewCell>
             </DataTemplate>
 
             <DataTemplate x:Key="AlternateSillyDataTemplate">
                 <ViewCell>
-                    <views:AlternateSillySquareCell effects:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
-                                                    effects:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
-                                                    effects:TapCommandEffect.TapParameter="{Binding .}" />
+                    <views:AlternateSillySquareCell sho:ViewEffect.TouchFeedbackColor="{StaticResource Accent}"
+                                                    sho:TapCommandEffect.Tap="{Binding OnItemTappedCommand}"
+                                                    sho:TapCommandEffect.TapParameter="{Binding .}" />
                 </ViewCell>
             </DataTemplate>
 
@@ -351,7 +345,7 @@
                                              AlternateSillySquare="{StaticResource AlternateSillyDataTemplate}"
                                              SillySquare="{StaticResource SillyDataTemplate}" />
 
-            <Style TargetType="tabs:BottomTabItem">
+            <Style TargetType="sho:BottomTabItem">
                 <Setter Property="SelectedTabColor" Value="{StaticResource Accent}" />
                 <Setter Property="UnselectedLabelColor" Value="Gray" />
                 <Setter Property="UnselectedIconColor" Value="LightGray" />
@@ -361,7 +355,7 @@
                 <Setter Property="IsTextVisible" Value="False" />
             </Style>
 
-            <Style ApplyToDerivedTypes="True" TargetType="mf:MaterialFrame">
+            <Style ApplyToDerivedTypes="True" TargetType="sho:MaterialFrame">
                 <!--<Setter Property="MaterialTheme" Value="AcrylicBlur" />
                 <Setter Property="AndroidBlurRadius" Value="10" />-->
                 <Setter Property="MaterialBlurStyle" Value="{DynamicResource DynamicBlurStyle}" />
@@ -369,6 +363,42 @@
                 <Setter Property="CornerRadius" Value="{DynamicResource DynamicCornerRadius}" />
             </Style>
 
+            <sho:SingleShade x:Key="LightTopShadow"
+                             BlurRadius="10"
+                             Opacity="0.1"
+                             Offset="0,-8"
+                             Color="Black" />
+
+            <sho:ImmutableShades x:Key="AcrylicTopShadow">
+                <sho:Shade BlurRadius="0"
+                           Opacity="1"
+                           Offset="0,-2"
+                           Color="White" />
+                <sho:Shade BlurRadius="10"
+                           Opacity="0.1"
+                           Offset="0,8"
+                           Color="Black" />
+            </sho:ImmutableShades>
+
+            <sho:SingleShade x:Key="LightBottomShadow"
+                             BlurRadius="10"
+                             Opacity="0.1"
+                             Offset="0,8"
+                             Color="Black" />
+
+            <sho:SingleShade x:Key="SegmentedBottomShadow"
+                             BlurRadius="10"
+                             Opacity="0.2"
+                             Offset="0,8"
+                             Color="{StaticResource Accent}" />
+
+            <sho:ImmutableShades x:Key="NoShadow" />
+
+            <sho:NeumorphismShades x:Key="NeumorphismShadow" />
+
+            <sho:NeumorphismShades x:Key="ThinNeumorphismShadow"
+                                   LowerOffset="8, 6"
+                                   UpperOffset="-8,-6" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
